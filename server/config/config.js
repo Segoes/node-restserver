@@ -11,7 +11,7 @@ process.env.NODE_ENV = process.env.NODE_ENV || 'dev';
 if (process.env.NODE_ENV === 'dev') {
     urlDB = 'mongodb://localhost:27017/coffee';
 } else {
-    urlDB = 'mongodb+srv://hck3791:iQJGcAyIdhQOlX17@cluster-node-course.ioffc.mongodb.net/coffee';
+    urlDB = process.env.MONGO_URI;
 }
 
 process.env.URLDB = urlDB; // URLDB its a global var invented by us
