@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const uniqueValidator = require('mongoose-unique-validator');
-require('../routes/user').delete;
+require('../routes/client').delete;
 
 let roles = {
     values: ['ADMIN_ROLE', 'USER_ROLE'],
@@ -51,4 +51,4 @@ clientSchema.methods.toJSON = function() {
 
 clientSchema.plugin(uniqueValidator, { message: '{PATH} debe ser único' });
 
-module.exports = mongoose.model('client', clientSchema);
+module.exports = mongoose.model('Client', clientSchema);

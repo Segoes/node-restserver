@@ -10,10 +10,8 @@ app.use(bodyParser.urlencoded({ extended: false }))
 // parse application/json
 app.use(bodyParser.json());
 
-const user = require('./routes/user');
-app.use(user);
-
-
+// Global config routes
+app.use(require('./routes/index'));
 
 mongoose.connect(process.env.URLDB, {
     useNewUrlParser: true,

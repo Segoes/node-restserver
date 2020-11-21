@@ -5,10 +5,12 @@ const saltRounds = 10;
 const salt = bcrypt.genSaltSync(saltRounds);
 const _ = require('underscore');
 const Client = require('../models/client');
+const { verifyToken, verifyRole } = require('../middlewares/auth');
+const client = require('../models/client');
 
 
 // Requests
-app.get('/client', function(req, res) {
+app.get('/client', [verifyToken, verifyRole], function(req, res) {
 
     let from = Number(req.query.from) || 0;
     let to = Number(req.query.limit);
@@ -36,10 +38,10 @@ app.get('/client', function(req, res) {
 
 });
 
-app.post('/client', function(req, res) {
+app.post('/client', [verifyToken, verifyRole], function(req, res) {
     let body = req.body;
 
-    let client = new client({
+    let client = new Client({
         name: body.name,
         email: body.email,
         password: bcrypt.hashSync(body.password, salt),
@@ -64,7 +66,7 @@ app.post('/client', function(req, res) {
 
 });
 
-app.put('/client/:id', function(req, res) {
+app.put('/client/:id', [verifyToken, verifyRole], function(req, res) {
     let id = req.params.id;
     let body = _.pick(req.body, ['name', 'email', 'img', 'role', 'state']);
 
@@ -85,7 +87,7 @@ app.put('/client/:id', function(req, res) {
     })
 });
 
-app.delete('/client/:id', function(req, res) {
+app.delete('/client/:id', [verifyToken, verifyRole], function(req, res) {
     let id = req.params.id;
 
     client.findByIdAndUpdate(id, { state: false }, { new: true }, (err, clientDB) => {
@@ -103,20 +105,6 @@ app.delete('/client/:id', function(req, res) {
         });
     });
 
-
-    // User.findByIdAndRemove(id, (err, userDeleted) => {
-    //     if (err || !userDeleted) {
-    //         return res.status(400).json({
-    //             ok: false,
-    //             err
-    //         })
-    //     }
-
-    //     res.json({
-    //         ok: true,
-    //         user: userDeleted
-    //     })
-    // });
 });
 
 module.exports = app;
